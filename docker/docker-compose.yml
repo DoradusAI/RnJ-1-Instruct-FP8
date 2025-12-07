@@ -1,0 +1,47 @@
+# RnJ-1-Instruct-FP8 Docker Compose
+#
+# Usage:
+#   docker compose up
+#
+# With specific GPU:
+#   GPU_ID=0 docker compose up
+
+services:
+  rnj-1-instruct-fp8:
+    image: vllm/vllm-openai:v0.12.0
+    ports:
+      - "8000:8000"
+    volumes:
+      - hf_cache:/root/.cache/huggingface
+    environment:
+      - VLLM_ATTENTION_BACKEND=FLASHINFER
+      - HF_HUB_ENABLE_HF_TRANSFER=1
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["${GPU_ID:-0}"]
+              capabilities: [gpu]
+    shm_size: "4g"
+    command: >
+      --model Doradus/RnJ-1-Instruct-FP8
+      --host 0.0.0.0
+      --port 8000
+      --tensor-parallel-size 1
+      --max-model-len 8192
+      --gpu-memory-utilization 0.90
+      --dtype auto
+      --trust-remote-code
+      --served-model-name rnj-1-instruct-fp8
+      --enable-chunked-prefill
+      --max-num-seqs 32
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+
+volumes:
+  hf_cache:
