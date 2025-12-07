@@ -25,7 +25,7 @@ tags:
 
 ## Model Description
 
-This is an **FP8 quantized** version of [DoradusAI/RnJ-1-Instruct](https://huggingface.co/DoradusAI/RnJ-1-Instruct), created using [llmcompressor](https://github.com/vllm-project/llm-compressor) (Neural Magic).
+This is an **FP8 quantized** version of [EssentialAI/RnJ-1-Instruct](https://huggingface.co/DoradusAI/RnJ-1-Instruct), created using [llmcompressor](https://github.com/vllm-project/llm-compressor) (Neural Magic).
 
 **Key Benefits:**
 - ~50% smaller model size (8GB vs 16GB)
